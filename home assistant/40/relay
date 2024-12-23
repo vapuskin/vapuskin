@@ -1,0 +1,171 @@
+esphome:
+  name: relay_solid_classic
+  friendly_name: relay_solid_classic
+
+
+esp32:
+  board: esp32-s2-saola-1
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "***"
+
+ota:
+  - platform: esphome
+    password: "***"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  output_power: 8.5
+#  manual_ip: 
+#    static_ip: 192.168.*.*
+#    gateway: 192.168.*.*
+#    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Relay_Hotspot"
+    password: "***"
+    
+web_server: # creates a web server where you can access all this stuff without home assistant (good for debugging or working headless (no HA))
+  port: 80
+  include_internal: true
+  ota: true
+
+
+captive_portal:
+
+status_led:
+  pin: 15
+
+switch:
+
+
+
+  - platform: gpio
+    pin: GPIO6
+    id: relay1
+    name: "Electromagnetic Relay1"
+    inverted: true
+    internal: true
+
+  - platform: gpio
+    pin: GPIO8
+    id: ssrelay1
+    name: "Solid State Relay1"
+    inverted: true
+    internal: true
+
+  - platform: gpio
+    pin: GPIO7
+    id: relay2
+    name: "Electromagnetic Relay2"
+    inverted: true
+    internal: true
+
+  - platform: gpio
+    pin: GPIO9
+    id: ssrelay2
+    name: "Solid State Relay2"
+    inverted: true
+    internal: true
+
+  - platform: template
+    name: "Virtual Button On"
+    id: virtual_button_on
+    turn_on_action:
+      - switch.turn_on: ssrelay1
+      - delay: 200ms
+      - switch.turn_on: relay1
+      - delay: 200ms
+      - switch.turn_off: ssrelay1
+
+  - platform: template
+    name: "Virtual Button Off"
+    id: virtual_button_off
+    turn_on_action:
+      - switch.turn_on: ssrelay1
+      - delay: 200ms
+      - switch.turn_off: relay1
+      - delay: 200ms
+      - switch.turn_off: ssrelay1
+
+  - platform: template
+    name: "Virtual Button On2"
+    id: virtual_button_on2
+    turn_on_action:
+      - switch.turn_on: ssrelay2
+      - delay: 200ms
+      - switch.turn_on: relay2
+      - delay: 200ms
+      - switch.turn_off: ssrelay2
+      
+  - platform: template
+    name: "Virtual Button Off2"
+    id: virtual_button_off2
+    turn_on_action:
+      - switch.turn_on: ssrelay2
+      - delay: 200ms
+      - switch.turn_off: relay2
+      - delay: 200ms
+      - switch.turn_off: ssrelay2
+
+binary_sensor:
+  - platform: template
+    name: "Electromagnetic Relay1 State"
+    lambda: |-
+      if (id(relay1).state) {
+        return true;
+      } else {
+        return false;
+      }
+
+  - platform: template
+    name: "Solid State Relay1 State"
+    lambda: |-
+      if (id(ssrelay1).state) {
+        return true;
+      } else {
+        return false;
+      }
+
+  - platform: template
+    name: "Electromagnetic Relay2 State"
+    lambda: |-
+      if (id(relay2).state) {
+        return true;
+      } else {
+        return false;
+      }
+
+  - platform: template
+    name: "Solid State Relay2 State"
+    lambda: |-
+      if (id(ssrelay2).state) {
+        return true;
+      } else {
+        return false;
+      }
+
+interval:
+  - interval: 1s
+    then:
+      - if:
+          condition:
+            switch.is_on: ssrelay1
+          then:
+            - delay: 1s
+            - switch.turn_off: ssrelay1
+      - if:
+          condition:
+            switch.is_on: ssrelay2
+          then:
+            - delay: 1s
+            - switch.turn_off: ssrelay2
