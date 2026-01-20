@@ -4,5 +4,9 @@
 # [udc.yahoo.com]
 127.0.0.1 udc.yahoo.com
 
+# [udcm.yahoo.com]
+127.0.0.1 udcm.yahoo.com
+
 # [browser.sentry-cdn.com]
 127.0.0.1 browser.sentry-cdn.com
+
