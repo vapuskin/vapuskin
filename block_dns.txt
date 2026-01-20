@@ -1,12 +1,16 @@
 # [big.oisd.nl]
 127.0.0.1 big.oisd.nl
 
-# [udc.yahoo.com]
+# [yahoo.com]
 127.0.0.1 udc.yahoo.com
-
-# [udcm.yahoo.com]
 127.0.0.1 udcm.yahoo.com
 
 # [browser.sentry-cdn.com]
 127.0.0.1 browser.sentry-cdn.com
 
+# [yandex.ru]
+127.0.0.1 metrika.yandex.ru
+127.0.0.1 udc.yahoo.com
+
+# [tiktok.com]
+127.0.0.1 log.byteoversea.com
