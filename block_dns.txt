@@ -10,7 +10,9 @@
 
 # [yandex.ru]
 127.0.0.1 metrika.yandex.ru
-127.0.0.1 udc.yahoo.com
+127.0.0.1 appmetrica.yandex.ru
+
 
 # [tiktok.com]
 127.0.0.1 log.byteoversea.com
+127.0.0.1 business-api.tiktok.com
